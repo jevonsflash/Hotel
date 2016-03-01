@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>getdetailsimple</title>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+
+                    <!--入住明细-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>入住明细</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                            <div class="well">
+                                <h3>
+                                    房间类型：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.roomTypeModel.typeName
+                                    </span>
+                                    <br />
+                                    床位数：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.roomTypeModel.bedNum
+                                    </span>
+                                    <br />
+
+                                    房间单价：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.roomTypeModel.price
+                                    </span>
+                                    
+                            </div>
+                            <div style="width:58px;margin-left:auto;margin-right:auto">
+                                <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

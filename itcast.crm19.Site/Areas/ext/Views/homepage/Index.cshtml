@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery-1.7.1.js"></script>
+    <script src="~/Content/admin/ligerUI/js/ligerui.all.js"></script>
+    <script type="text/javascript">
+        var tab = window.parent.tab;
+        function f_addTab(tabid, text, url) {
+            tab.addTabItem({
+                tabid: tabid,
+                text: text,
+                url: url
+            });
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <div>
+            <img src="~/images/fpbg.jpg" width="100%"/>
+        </div>
+        <div class="hero-unit" style="width:100%; opacity:0.8; position:absolute;left:0;top:0;z-index:2; font-family:'Microsoft YaHei'">
+            <h1>欢迎来到酒店信息管理系统<small>版本v1.0.0 zzuli.edu.cn</small></h1>
+            <br />
+            <p style="font-size:32px">开始你的工作吧</p>
+            <br />
+            <p>
+                <a class="btn btn-primary btn-large" href="javascript:void(0)" onclick="f_addTab(39,'客房HUB','/room/roomhub/index')">
+                    客房HUB
+                </a>
+
+                <a class="btn btn-primary btn-large" href="javascript:void(0)" onclick="f_addTab(18, '我的审核单', '/workflow/wfprocess/index')">
+                    审核任务
+                </a>
+
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>

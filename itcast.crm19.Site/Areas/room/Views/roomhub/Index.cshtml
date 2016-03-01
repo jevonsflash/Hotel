@@ -1,0 +1,75 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery.tmpl.min.js"></script>
+    <script type="text/x-jquery-tmpl" id="trTmpl">
+        <li class="span2">
+            <div class="thumbnail ${statusStyle}" style="font-family:'Microsoft YaHei'">
+                <h2>${roomName}<small>${typeName}</small></h2>
+                <h4>${statusName} 床位${bedNum}个</h4>
+                <br />
+                <button class="btn btn-info btn-small" onclick="var id=${roomID} ; getDetail(id);">明细</button>
+                <button class="btn btn-success btn-small" ${addcheckinenable} onclick="var id=${roomID}; addCheckIn(id);">入住</button>
+                <button class="btn btn-danger btn-small" ${delcheckinenable} onclick="var id=${roomID}; CheckOut(id);">退房</button>
+            </div>
+        </li>
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            getlist();
+        })
+        function getlist() {
+            $.post("/room/roomhub/getlist", null, success, "json");
+        }
+        function success(data, text, jq) {
+            var $lis = $("#trTmpl").tmpl(data);
+            $lis.appendTo("#roomHubContainer");
+        }
+
+        function addCheckIn(roomid) {
+            helper.openPanel("/room/checkininfo/add?checkInRoomArg="+roomid+"&checkInGuestArg=-1", "添加入住信息");
+
+        }
+        function CheckOut(roomid) {
+            helper.openPanel("/room/checkininfo/checkOut/"+roomid, "退房清单");
+        }
+        function getDetail(roomid) {
+            helper.openPanel("/room/roomhub/getdetail/"+roomid,"查看明细");
+        }
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body">
+
+                <div class="row-fluid">
+                    <ul class="thumbnails" id="roomHubContainer">
+                        <li class="span22">
+                            <div class="widget-title">
+
+                                <span class="icon"><i class="icon-home"></i></span>
+                                <h5>客房HUB</h5>
+
+                                <div style="width:58px; margin:0px auto">
+                                    <button class="btn btn-default" onclick="window.location=location ">刷新</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+
+    var grid;
+    $(function () {
+        getlist();
+    })
+
+    function getlist() {
+        helper.getFunction(createGrid);
+    }
+    function createGrid(toolbaritems) {
+        grid = $("#list").ligerGrid({
+            columns: [
+                { display: "房间类型编号", name: "typeID" },
+                { display: "房间类型名称", name: "typeName" },
+                { display: "房间床位数", name: "bedNum" },
+                { display: "房间价格", name: "price" }
+            ],
+            url: "/room/type/getlist",
+            parms: [{ name: "kname", value: $("#kname").val() }],
+            toolbar: { items: toolbaritems }
+        });
+    }
+
+    function add() {
+        helper.openPanel("/room/type/add", "添加房间类型");
+
+    }
+    function edit() {
+
+    }
+    function del() {
+        $.ligerDialog.confirm("是否删除?", "提示", function (yes) {
+            if (yes) {
+                var row = grid.getSelectedRow();
+                if (!row) {
+                    //提示用户必须选择一行
+                    $.ligerDialog.warn("必须选择要删除的行", "警告提醒");
+                    return; //阻断下面代码的运行
+                }
+                var typeID = row.typeID;
+                var url = "/room/type/del/" + typeID;
+                $.post(url, null, function (ajaxobj) {
+                    helper.returnStatus(ajaxobj, getlist)
+                }, "json");
+            }
+        })
+
+    }
+
+    
+    function setNodes() {
+        var row = grid.getSelectedRow();
+        if (!row) {
+            //提示用户必须选择一行
+            $.ligerDialog.warn("必须选择要设的工作流的行", "警告提醒");
+            return; //阻断下面代码的运行
+        }
+        var wfid = row.wfID;
+        helper.openPanel("/workflow/wfwork/setNodes/" + wfid, "设置工作流节点", 780);
+    }
+    </script>
+
+
+</head>
+<body>
+    <body>
+        <div id="content">
+            <div id="content-header">
+            </div>
+            <div style="height: 100%;">
+                <div id="content-body" class="row-fluid">
+                    <div class="span22">
+                        <!--查询条件 -->
+                        <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon"><i class="icon-search"></i></span>
+                                <h5>查询条件</h5>
+                            </div>
+                            <div class="widget-content nopadding">
+                                <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                    <div class="control-group">
+                                        <div class="search-group">
+                                            <label class="search-label">名称</label>
+                                            <div class="span2 search-input">
+                                                <input id="kname" name="kname" type="text" />
+                                            </div>
+                                            <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                                <span class="icon-search"></span>搜索
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!--房间类型列表-->
+                        <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <h5>房间类型列表</h5>
+                            </div>
+                            <div id="list" class="widget-content nopadding">
+                                用于显示ligergrid加载出来的数据
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</body>
+</html>

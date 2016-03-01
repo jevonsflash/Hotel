@@ -1,0 +1,72 @@
+﻿@model itcast.crm19.model.wfRequestForm
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>add</title>
+</head>
+<body>
+    <div style="margin-top:20px">
+        @using (Ajax.BeginForm("add", "requestform", new AjaxOptions()
+        {
+            HttpMethod = "post",
+            OnBegin = "helper.ajaxBegin",
+            OnSuccess = "helper.ajaxSuccess",
+            OnComplete = "helper.ajaxComplete"
+        }))
+        {
+            <table class="list">
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfRFTitle)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.wfRFTitle)
+                        @Html.ValidationMessageFor(c => c.wfRFTitle)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfID)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.wfID, ViewBag.works as SelectList)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfRFPriority)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.wfRFPriority, ViewBag.priority as SelectList)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfRFNum)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.wfRFNum)
+                        @Html.ValidationMessageFor(c => c.wfRFNum)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfRFRemark)</th>
+                    <td>
+                        @Html.TextAreaFor(c => c.wfRFRemark)
+                        @Html.ValidationMessageFor(c => c.wfRFRemark)
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button class="btn btn-default">新增申请单</button>
+                        <button class="btn btn-default" onclick="window.parent.helper.localWindow.close()">关闭</button>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+</body>
+</html>

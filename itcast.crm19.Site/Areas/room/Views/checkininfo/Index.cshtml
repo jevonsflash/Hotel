@@ -1,0 +1,126 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+
+        var grid;
+        $(function () {
+            getlist();
+        })
+
+        function getlist() {
+            helper.getFunction(createGrid);
+        }
+        function createGrid(toolbaritems) {
+            grid = $("#list").ligerGrid({
+                columns: [
+                    { display: "入住编号", name: "checkInID" },
+                    { display: "入住房间", name: "checkInRoom" },
+                    { display: "入住人", name: "checkInGuest" },
+                    { display: "入住状态", name: "Status" },
+                    { display: "入住办理员", name: "checkInCreator" },
+                    { display: "入住时间", name: "checkInTime" },
+                    { display: "已缴押金", name: "checkInDeposit" },
+                    { display: "备注", name: "checkInRemark" }
+                ],
+                url: "/room/checkininfo/getlist",
+                parms: [{ name: "kname", value: $("#kname").val() }],
+                toolbar: { items: toolbaritems }
+            });
+        }
+
+        function add() {
+            helper.openPanel("/room/checkininfo/add?checkInRoomArg=-1&checkInGuestArg=-1", "添加入住信息");
+
+        }
+        function edit() {
+            var row = grid.getSelectedRow();
+            if (!row) {
+                //提示用户必须选择一行
+                $.ligerDialog.warn("必须选择要修改的入住的行", "警告提醒");
+                return; //阻断下面代码的运行
+            }
+            var checkInID = row.checkInID;
+            helper.openPanel("/room/checkininfo/edit/" + checkInID, "编辑入住");
+        }
+
+        function del() {
+            $.ligerDialog.confirm("是否删除?", "提示", function (yes) {
+                if (yes) {
+                    var row = grid.getSelectedRow();
+                    if (!row) {
+                        //提示用户必须选择一行
+                        $.ligerDialog.warn("必须选择要删除的行", "警告提醒");
+                        return; //阻断下面代码的运行
+                    }
+                    var checkInID = row.checkInID;
+                    var url = "/room/checkininfo/del/" + checkInID;
+                    $.post(url, null, function (ajaxobj) {
+                        helper.returnStatus(ajaxobj, getlist)
+                    }, "json");
+                }
+            })
+
+        }
+
+
+    </script>
+
+
+</head>
+<body>
+    <body>
+        <div id="content">
+            <div id="content-header">
+            </div>
+            <div style="height: 100%;">
+                <div id="content-body" class="row-fluid">
+                    <div class="span22">
+                        <!--查询条件 -->
+                        <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon"><i class="icon-search"></i></span>
+                                <h5>查询条件</h5>
+                            </div>
+                            <div class="widget-content nopadding">
+                                <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                    <div class="control-group">
+                                        <div class="search-group">
+                                            <label class="search-label">名称</label>
+                                            <div class="span2 search-input">
+                                                <input id="kname" name="kname" type="text" />
+                                            </div>
+                                            <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                                <span class="icon-search"></span>搜索
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!--入住登记列表-->
+                        <div class="widget-box">
+                            <div class="widget-title">
+                                <span class="icon"><i class="icon-th"></i></span>
+                                <h5>入住登记列表</h5>
+                            </div>
+                            <div id="list" class="widget-content nopadding">
+                                用于显示ligergrid加载出来的数据
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+</body>
+</html>

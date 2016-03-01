@@ -1,0 +1,125 @@
+﻿@model itcast.crm19.model.LoginInfo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/admin/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/admin/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Content/admin/ligerUI/js/ligerui.all.js"></script>
+
+    <style type="text/css">
+        .list {
+            border-collapse: collapse;
+            width: 400px;
+            margin: 0 auto;
+        }
+
+            .list th {
+                padding: 5px;
+                text-align: right;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .list td {
+                padding: 5px;
+            }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $.ligerDialog.open({
+                title: "酒店信息管理系统",
+                target: $("#login"), height: 280, width: 450
+                , buttons: [{
+                    text: '登录', onclick: function (item, dialog) {
+                        //利用js代码模拟点击id=loginok的submit按钮
+                        $("#loginOk").click();
+                    }, cls: 'l-dialog-btn-highlight'
+                }
+                    , {
+                        text: '重置', onclick: function (item, dialog) {
+                            $("#reset").click();
+                        }
+                    }]
+            });
+        })
+
+        function resetVcode() {
+            $("#imgvcode").attr("src", "/admin/Login/Vcode?rid=" + Math.random());
+        }
+
+        function success(ajaxobj) {
+            //处理登录成功的逻辑，先提示再页面跳转
+            if (ajaxobj.status == 1) {
+                $.ligerDialog.error(ajaxobj.msg);
+                return;
+            }
+            window.location = "/admin/Home/Index";
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <img style="width:100%" src="~/images/bg.jpg" />
+    </div>
+    <div id="login">
+        @using (Ajax.BeginForm("Login", "Login", new AjaxOptions()
+        {
+            Url = Url.Action("Login", "Login"),
+            HttpMethod = "post",
+            OnSuccess = "success"
+        }))
+        {
+            <table class="list">
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uLoginName)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uLoginName)
+                        @Html.ValidationMessageFor(c => c.uLoginName)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uLoginPWD)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uLoginPWD)
+                        @Html.ValidationMessageFor(c => c.uLoginPWD)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.Vcode)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.Vcode, new { style = "width:110px" })
+                        <img id="imgvcode" onclick="resetVcode()" style="cursor: pointer;" src="/admin/Login/Vcode" height="25" width="60" />
+                        @Html.ValidationMessageFor(c => c.Vcode)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="padding-left:100px;">
+                        @Html.DisplayNameFor(c => c.isReMember)
+                        @Html.CheckBoxFor(c => c.isReMember)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input id="loginOk" style="display:none" type="submit" value="登录" />
+                        <input id="reset" style="display:none" type="reset" value="重置" />
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+
+</body>
+</html>

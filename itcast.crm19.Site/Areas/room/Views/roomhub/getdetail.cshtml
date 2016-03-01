@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>getdetail</title>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+
+                    <!--入住明细-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>入住明细</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                            <div class="well">
+                                <h3>
+                                    房间类型：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.roomTypeModel.typeName
+                                    </span>
+                                    <br />
+                                    床位数：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.roomTypeModel.bedNum
+                                    </span>
+                                    <br />
+
+                                    房间单价：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.roomTypeModel.price
+                                    </span>
+                                    <br />
+                                    入住人：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.guestModel.guestName
+                                    </span>
+                                    <br />
+
+                                    电话：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.guestModel.guestPhone
+                                    </span>
+                                    <br />
+                                    级别：
+                                    <span style="font-weight:normal">
+                                        @{string guestStatusName = string.Empty;
+                                          switch ((int)ViewBag.guestModel.guestStatus)
+                                        {
+                                            case 1: guestStatusName = "高级会员"; break;
+                                            case 2: guestStatusName = "会员"; break;
+                                            case 3: guestStatusName = "普通"; break;
+                                            default:
+                                                break;
+                                        }
+                                        }
+                                        @guestStatusName
+                                    </span>
+                                    <br />
+                                    入住时间：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.checkInModel.checkInTime
+                                    </span>
+                                    <br />
+
+                                    已住时间：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.duration
+                                    </span>
+                                    <br />
+                                    总消费：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.totalPrice
+                                    </span>
+
+                                </h3>
+                            </div>
+                            <div style="width:58px;margin-left:auto;margin-right:auto">
+                                <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

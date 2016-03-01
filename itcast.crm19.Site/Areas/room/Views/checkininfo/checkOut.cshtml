@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>checkOut</title>
+    <script type="text/javascript">
+        function checkOut(id) {
+            $.post("/room/checkininfo/checkOutAction/" + id, null, function (data) {
+                helper.ajaxSuccess(data)
+            }
+            , "json");
+        }
+
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+
+                    <!--退房清单-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>退房清单</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                            <div class="well">
+                                <h3>
+                                    入住人：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.guestName
+                                    </span>
+                                    <br />
+                                    入住时间：
+                                    <span style="font-weight:normal">
+                                        @Model.checkInTime
+                                    </span>
+                                    <br />
+                                    退房时间：
+                                    <span style="font-weight:normal">
+                                        @DateTime.Now
+                                    </span>
+                                    <br />
+
+                                    历时：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.duration
+                                    </span>
+                                    <br />
+
+                                    总消费：
+                                    <span style="font-weight:normal">
+                                        @ViewBag.totalPrice
+                                    </span>
+                                    <br />
+                                    已缴押金：
+                                    <span style="font-weight:normal">
+                                        @Model.checkInDeposit
+                                    </span>
+                                    <br />
+                                    应缴纳：
+                                    <span style="font-weight:normal">
+                                        @{
+                                            decimal price = ViewBag.totalPrice - Model.checkInDeposit;
+                                        }
+                                        @price
+                                    </span>
+
+                                </h3>
+                            </div>
+                            <div style="width:148px;margin-left:auto;margin-right:auto">
+                                <button class="btn btn-danger" onclick="checkOut(@ViewBag.checkInRoomID)">确认退房</button>
+                                <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>setBranch</title>
+    <script type="text/javascript">
+        var wfnid;
+        var grid;
+        $(function () {
+            wfnid=@ViewBag.wfnid;
+            getlist();
+
+        })
+
+        function getlist() {
+            grid=$("#list").ligerGrid({
+                columns:[
+                    { display: "编号", name: "wfbID" },
+                    { display: "流转标示", name: "wfnToken" },
+                    {display:"所属节点",name:"nodeIn"},
+                    { display: "转交节点", name: "nodeTo" }
+                ],
+                url:"/workflow/wfwork/getBranchList/"+wfnid,
+                usePager:false,
+                toolbar: {
+                    items: [
+                        { text: "新增", click: add, icon: "add" },
+                        { line: true },
+                        { text: "编辑", click: edit, icon: "modify" },
+                        { line: true },
+                        { text: "删除", click: del, icon: "delete" },
+                        { line: true },
+                        { text: "刷新", click: getlist, icon: "refresh" }
+                    ]
+                }
+            });
+        }
+        function add() {
+
+        }
+        function edit() {
+
+        }
+        function del() {
+
+        }
+
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb">
+            </div>
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>节点分支列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,95 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+
+        var tree;
+        var osID;
+        var grid;
+        $(function () {
+            getOrganTree();
+        })
+        function getOrganTree() {
+            tree = $("#organTree").ligerTree({
+                url: "/admin/role/getOrganTree",
+                textFieldName: "osName",
+                idFieldName: "osID",
+                parentIDFieldName: "osParentID",
+                checkbox: false,
+                onSelect: function (obj) {
+                    osID = obj.data.osID;
+                    getlist();
+                }
+            });
+        }
+        function getlist() {
+            helper.getFunction(createGrid)
+        }
+
+        function createGrid(toolbaritems) {
+            grid = $("#list").ligerGrid({
+                columns: [
+                    { display: "角色名称", name: "rName" },
+                    { display: "角色排序号", name: "rSort" },
+                    { display: "备注", name: "rRemark", widith: 200 },
+                    {
+                        display: "状态", name: "rStatus", render: function (d, i, v) {
+                            return v == "1" ? "<font color='red'>停用</font>" : "<font color='green'>正常</font>"
+                        }
+                    }
+                ],
+                usePager: false,
+                url: "/admin/role/getlist/" + osID,
+                toolbar: { items: toolbaritems }
+            })
+        }
+
+        function add() { }
+        function edit() { }
+        function setPermiss() {
+            var row = grid.getSelectedRow();
+            if (!row) {
+                $.ligerDialog.warn("必须选择要赋予权限的数据角色");
+                return;
+            }
+            var rid = row.rID;
+            helper.openPanel("/admin/role/setPermiss/" + rid, "设置权限");
+            
+        }
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>菜单按钮列表</h5>
+                        </div>
+                        <div style="width: 20%; height: 450px; float: left; border: 1px solid #0094ff;">
+                            <ul id="organTree"></ul>
+                        </div>
+                        <div style="width: 79%; float: right;">
+                            <div id="list">
+                                <h2>请在右边选择一个角色以查看详情</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

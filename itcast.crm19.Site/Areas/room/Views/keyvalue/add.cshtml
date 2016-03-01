@@ -1,0 +1,72 @@
+﻿@model itcast.crm19.model.roomKeyValue
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>add</title>
+</head>
+<body>
+    <<div style="margin:20px">
+    @using (Ajax.BeginForm("add", "keyvalue", new AjaxOptions()
+        {
+            Url = Url.Action("add", "keyvalue"),
+            HttpMethod = "Post",
+            OnSuccess = "ajaxSuccess",
+            OnBegin = "ajaxBegin",
+            OnComplete = "ajaxComplete"
+
+        }))
+    {
+        <table class="list">
+            <tr>
+                <th>@Html.DisplayNameFor(c => c.KName)</th>
+                <td>
+                    @Html.TextBoxFor(c => c.KName   )
+                    @Html.ValidationMessageFor(c => c.KName)
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(c => c.Kvalue)</th>
+                <td>
+                    @Html.TextBoxFor(c => c.Kvalue)
+                    @Html.ValidationMessageFor(c => c.Kvalue)
+                </td>
+            </tr>
+            <tr>
+                <th>@Html.DisplayNameFor(c => c.KType)</th>
+                <td>
+                    @Html.TextBoxFor(c => c.KType)
+                    @Html.ValidationMessageFor(c => c.KType)
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>
+                    <button class="btn btn-default">添加</button>
+                    <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="loading">
+                        <img src="~/images/loading.gif" />
+                        正在提交中.....
+                    </div>
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+
+        var grid;
+        $(function () {
+            getlist();
+        })
+        function getlist() {
+            helper.getFunction(createGrid);
+        }
+        function createGrid(toolbaritems) {
+            grid = $("#list").ligerGrid({
+                columns: [
+                    { display: "数据字典编号", name: "KID", align: "center" },
+                    { display: "数据字典值", name: "Kvalue", align: "center" },
+                    { display: "数据字典名称", name: "KName", align: "center" },
+                    { display: "数据字典类型", name: "KType", align: "center" },
+                ],
+
+                url: "/room/keyvalue/getlist",
+                toolbar: { items: toolbaritems }
+            })
+        }
+        function add() {
+            helper.openPanel("/room/keyvalue/add", "新增数据字典");
+        }
+        function edit() { }
+        function del() {
+            $.ligerDialog.confirm("是否删除?", "提示", function (yes) {
+                if (yes) {
+                    var row = grid.getSelectedRow();
+                    if (!row) {
+                        //提示用户必须选择一行
+                        $.ligerDialog.warn("必须选择要删除的行", "警告提醒");
+                        return; //阻断下面代码的运行
+                    }
+                    var KID = row.KID;
+                    var url = "/room/keyvalue/del/" + KID;
+                    $.post(url, null, function (ajaxobj) {
+                        helper.returnStatus(ajaxobj, getlist)
+                    }, "json");
+                }
+            })
+        }
+    </script>
+
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--查询条件 -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-search"></i></span>
+                            <h5>查询条件</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                <div class="control-group">
+                                    <div class="search-group">
+                                        <label class="search-label">用户名称</label>
+                                        <div class="span2 search-input">
+                                            <input id="kname" name="kname" type="text" value="">
+                                        </div>
+                                        <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                            <span class="icon-search"></span>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--数据字典列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>数据字典列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

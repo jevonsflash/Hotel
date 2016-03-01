@@ -1,0 +1,75 @@
+﻿@model itcast.crm19.model.wfWorkNodes
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AddNode</title>
+</head>
+<body>
+    <div style="margin-top:20px">
+        @using (Ajax.BeginForm("AddNode", "wfwork", new AjaxOptions()
+        {
+            HttpMethod = "post",
+            OnBegin = "helper.ajaxBegin",
+            OnSuccess = "helper.ajaxSuccess",
+            OnComplete = "helper.ajaxComplete"
+        }))
+        {
+            <table>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfNodeTitle)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.wfNodeTitle)
+                        @Html.ValidationMessageFor(c => c.wfNodeTitle)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfNodeType)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.wfNodeType, ViewBag.nodetypes as SelectList)
+                        @Html.ValidationMessageFor(c => c.wfNodeType)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfnRoleType)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.wfnRoleType, ViewBag.roletypes as SelectList)
+                        @Html.ValidationMessageFor(c => c.wfnRoleType)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfnBizMethod)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.wfnBizMethod, ViewBag.methods as SelectList)
+                        @Html.ValidationMessageFor(c => c.wfnBizMethod)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.wfnMaxNum)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.wfnMaxNum)
+                        @Html.ValidationMessageFor(c => c.wfnMaxNum)
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button class="btn btn-default">新增节点</button>
+                        <button class="btn btn-default" onclick="window.parent.helper.localWindow.close()">关闭</button>
+                    </td>
+                </tr>
+            </table>
+
+        }
+    </div>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+</body>
+</html>

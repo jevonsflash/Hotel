@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A9CFDE11-D623-4435-99C5-9149FBE0B15D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>itcast.crm19.IServices</RootNamespace>
+    <AssemblyName>itcast.crm19.IServices</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="base\IBaseServices.cs" />
+    <Compile Include="IroomCheckInInfoServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IroomGuestInfoServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IroomKeyValueServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IroomRoomInfoServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IroomTypeServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IServices.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysFunctionServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysKeyValueServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysMenusServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysOrganStructServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysPermissListServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysRoleServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysUserInfoServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IsysUserInfo_RoleServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IwfProcessServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IwfRequestFormServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IwfWorkBranchServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IwfWorkNodesServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IwfWorkServices.cs">
+      <DependentUpon>IServices.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\itcast.crm19.model\itcast.crm19.model.csproj">
+      <Project>{d1002d0c-45c8-4c30-be26-00668943d917}</Project>
+      <Name>itcast.crm19.model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IServices.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IServices.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

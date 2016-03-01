@@ -1,0 +1,125 @@
+﻿@model itcast.crm19.model.sysUserInfo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>add</title>
+</head>
+<body>
+
+    <div style="margin:20px">
+        @using (Ajax.BeginForm("add", "userinfo", new AjaxOptions()
+        {
+            Url = Url.Action("add", "userinfo"),
+            HttpMethod = "Post",
+            OnSuccess = "ajaxSuccess",
+            OnBegin = "ajaxBegin",
+            OnComplete = "ajaxComplete"
+
+        }))
+        {
+            <table class="list">
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uLoginName)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uLoginName)
+                        @Html.ValidationMessageFor(c => c.uLoginName)
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uLoginPWD)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uLoginPWD)
+                        @Html.ValidationMessageFor(c => c.uLoginPWD)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uRealName)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uRealName)
+                        @Html.ValidationMessageFor(c => c.uRealName)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uMobile)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uMobile)
+                        @Html.ValidationMessageFor(c => c.uMobile)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uEmial)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uEmial)
+                        @Html.ValidationMessageFor(c => c.uEmial)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uQQ)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.uQQ)
+                        @Html.ValidationMessageFor(c => c.uQQ)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uGender)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.uGender, ViewBag.gender as SelectList)
+                        @Html.ValidationMessageFor(c => c.uGender)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uCompanyID)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.uCompanyID, ViewBag.uCompanyID as SelectList)
+                        @Html.ValidationMessageFor(c => c.uCompanyID)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uWorkGroupID)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.uWorkGroupID, ViewBag.uWorkgroupID as SelectList)
+                        @Html.ValidationMessageFor(c => c.uWorkGroupID)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.uStatus)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.uStatus, ViewBag.Status as SelectList)
+                        @Html.ValidationMessageFor(c => c.uStatus)
+                    </td>
+                </tr>
+
+                <tr>
+                    <th></th>
+                    <td>
+                        <button class="btn btn-default">添加</button>
+                        <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="loading">
+                            <img src="~/images/loading.gif" />
+                            正在提交中.....
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+
+</body>
+
+</html>

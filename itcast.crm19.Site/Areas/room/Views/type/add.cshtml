@@ -1,0 +1,70 @@
+﻿@model itcast.crm19.model.roomType
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>add</title>
+</head>
+<body>
+    <div style="margin:20px">
+        @using (Ajax.BeginForm("add", "type", new AjaxOptions()
+        {
+            Url = Url.Action("add", "type"),
+            HttpMethod = "Post",
+            OnSuccess = "ajaxSuccess",
+            OnBegin = "ajaxBegin",
+            OnComplete = "ajaxComplete"
+
+        }))
+        {
+            <table class="list">
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.typeName)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.typeName)
+                        @Html.ValidationMessageFor(c => c.typeName)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.bedNum)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.bedNum)
+                        @Html.ValidationMessageFor(c => c.bedNum)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.price)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.price)
+                        @Html.ValidationMessageFor(c => c.price)
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button class="btn btn-default">添加</button>
+                        <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="loading">
+                            <img src="~/images/loading.gif" />
+                            正在提交中.....
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>setNodes</title>
+    <script type="text/javascript">
+        var wfID;
+        var grid;
+        $(function () {
+            wfID= @ViewBag.wfID;
+            getlist();
+        })
+        //负责获取节点数据列表
+        function getlist() {
+            grid = $("#list").ligerGrid({
+                columns: [
+                    { display: "编号", name: "wfnID" },
+                    { display: "排序号", name: "wfnOrderNo" },
+                    { display: "节点类型", name: "NodeTypeName" ,render:function (data,index,value) {
+                        var color="green";
+                        if (data.wfNodeType=="35")
+                        {
+                            color="blue";
+                        }
+                        else if (data.wfNodeType=="36") {
+                            color="red";
+                        }
+
+                        var str=  "<font color='"+color+"'>"+ value+"</font>";
+                        return str;
+                    }},
+                    { display: "节点标题", name: "wfNodeTitle" },
+                    { display: "审批角色类型", name: "RoleTypeName" },
+                    { display: "处理逻辑", name: "BizMethod" },
+                ],
+                url:"/workflow/wfwork/getNodes/"+wfID,
+                usePager:false,
+                toolbar:{
+                    items: [
+                        { text: "新增", click: add, icon: "add" },
+                        { line: true },
+                        { text: "编辑", click: edit, icon: "modify" },
+                        { line: true },
+                        { text: "删除", click: del, icon: "delete" },
+                        { line: true },
+                        { text: "节点分支设置", click: setBranch, icon: "ok" },
+                        { line: true },
+                        { text: "上移一行", click: up, icon: "up" },
+                        { line: true },
+                        { text: "下移一行", click: down, icon: "down" }
+                    ]
+                }
+
+
+            });
+            function add() {
+                helper.openPanel("/workflow/wfwork/AddNode/"+wfID ,"新增节点");
+            }
+            function edit() {
+                var row=grid.getSelectedRow();
+                if (!row) {
+                    //提示用户必须选择一行
+                    $.ligerDialog.warn("必须选择要修改的行", "警告提醒");
+                    return; //阻断下面代码的运行
+                }
+                var wfnID=row.wfnID;
+
+                helper.openPanel("/workflow/wfwork/EditNode/"+wfnID ,"修改节点");
+            }
+            function del() {
+                $.ligerDialog.confirm("是否删除?","提示",function(yes) {
+                    if (yes) {
+                        var row=grid.getSelectedRow();
+                        if (!row) {
+                            //提示用户必须选择一行
+                            $.ligerDialog.warn("必须选择要删除的行", "警告提醒");
+                            return; //阻断下面代码的运行
+                        }
+                        var wfnID=row.wfnID;
+                        var url="/workflow/wfwork/delNode/"+wfnID;
+                        $.post(url,null,function(ajaxobj) {
+                            helper.returnStatus(ajaxobj,getlist)
+                        },"json");
+                    }
+                })
+
+            }
+            function setBranch() {
+                var row=grid.getSelectedRow();
+                if (!row) {
+                    //提示用户必须选择一行
+                    $.ligerDialog.warn("必须选择要移动的行", "警告提醒");
+                    return; //阻断下面代码的运行
+                }
+                var wfnID=row.wfnID;
+                window.parent. helper.openPanel("/workflow/wfwork/setBranch/"+wfnID,"节点分支设置",780);
+            }
+            function up() {
+                upDownOpt("up");
+            }
+            function down() {
+                upDownOpt("down");
+            }
+            function upDownOpt(method) {
+                var row=grid.getSelectedRow();
+                if (!row) {
+                    //提示用户必须选择一行
+                    $.ligerDialog.warn("必须选择要移动的行", "警告提醒");
+                    return; //阻断下面代码的运行
+                }
+                var wfnID=row.wfnID;
+                var url="/workflow/wfwork/"+method+"/"+wfnID;
+                $.post(url,null,function(ajaxobj) {
+                    helper.returnStatus(ajaxobj,getlist)
+                },"json");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>工作流节点定义</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+﻿@{
+    Layout = null;
+}
+@using itcast.crm19.WebHelper
+@using itcast.crm19.model
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery-1.7.1.js"></script>
+    <script src="~/Content/admin/ligerUI/js/ligerui.all.js"></script>
+    <script type="text/javascript">
+        var tab;
+        $(function () {
+            var lay = $("#layout1").ligerLayout({
+                leftWidth: 200,
+                allowRightCollapse:false,
+                topHeight:100
+            });
+            $("#menus").ligerAccordion(
+               {
+                   height: 300
+               });
+            tab = $("#tab1").ligerTab();
+        })
+
+        function f_addTab(tabid, text, url) {
+            tab.addTabItem({
+                tabid: tabid,
+                text: text,
+                url:url
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="layout1">
+        <div position="top" class="top1" style="height:100px">
+            <a class="title" style="font-size:xx-large;font-family:'Microsoft YaHei'">酒店信息管理系统</a>
+            <ul>
+                <li>欢迎【@UserManager.LoginedUserInfo().uRealName】登录系统</li>
+                <li><a href="/admin/login/logout">退出</a></li>
+            </ul>
+            <label style="color:lightgray; font-family:'Microsoft YaHei'" class="title">版本v1.0.0 zzuli.edu.cn</label>
+        </div>
+        <div position="left">
+            <div id="menus">
+                @{
+                    //获取当前用户的权限菜单数据
+                    var plist = ViewBag.plist as List<Usp_GetPermissMenu19_Result>;
+                    if (plist != null && plist.Any())
+                    {
+                        foreach (var item in plist)
+                        {
+                            //生成一级菜单
+                            if (item.mParentID == -1)
+                            {
+                                <div title="@item.mName">
+                                    <ul>
+                                        @foreach (var subitem in plist)
+                                        {
+                                            if (subitem.mParentID == item.mID)
+                                            {
+                                                <li><i class="@subitem.mPicname"></i><a href="javascript:void(0)" onclick="f_addTab(@subitem.mID,'@subitem.mName','@subitem.mUrl')">@subitem.mName</a></li>
+
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div id="tab1" position="center">
+            <div title="首页">
+                <iframe src="/ext/homepage/index"></iframe>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

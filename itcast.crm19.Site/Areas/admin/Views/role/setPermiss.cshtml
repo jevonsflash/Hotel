@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>setPermiss</title>
+    <script type="text/javascript">
+        var id=@ViewBag.id;
+        var tree;
+        $(function () {
+            getMenusAndFunctions();
+        })
+        function getMenusAndFunctions() {
+            tree = $("#mftree").ligerTree({
+                url: "/admin/role/getMenusAndFunctions/"+id,
+                textFieldName: "text",
+                idFieldName: "id",
+                parentIDFieldName: "pid",
+                autoCheckboxEven: false
+            });
+        }
+        function saveData() {
+            var nodes=tree.getChecked();
+            var tempItem;
+            if (!nodes||nodes.length==0) {
+                $.ligerDialog.warn("角色至少要有一个权限");
+            }
+            var params=id+"-";
+            for (var i = 0; i < nodes.length; i++) {
+                tempItem=nodes[i].data;
+                if (tempItem.ismenus) {
+                    params+=tempItem.id+",0";
+                }
+                else{
+                    params+=tempItem.pid+","+tempItem.id;
+                } 
+                params+=";";
+                
+            }
+            $.post("/admin/role/setPermiss/","params="+params,function (ajaxObj) {
+                helper.returnStatus(ajaxObj,function () {
+                    $.ligerDialog.alert(ajaxObj.msg);
+                })
+            })
+        }
+    </script>
+</head>
+<body>
+    <div id="content" style="margin-top: 15px;">
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--列表-->
+                    <div>
+                        <button class="btn btn-default" onclick="saveData()">保存</button>
+                        <button class="btn btn-default" onclick="window.parent.helper.localWindow.close()">关闭</button>
+                    </div>
+                    <div class="widget-box">
+                        <ul id="mftree"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

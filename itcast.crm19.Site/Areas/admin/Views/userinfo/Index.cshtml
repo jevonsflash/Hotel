@@ -1,0 +1,145 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+
+    <script type="text/javascript">
+
+        var grid;
+        $(function () {
+            getlist();
+        })
+        function getlist() {
+            helper.getFunction(createGrid);
+        }
+        function createGrid(toolbaritems) {
+            grid = $("#list").ligerGrid({
+                columns: [
+                    { display: "编号", name: "uID", align: "center" },
+                    { display: "登陆用户", name: "uLoginName", align: "center" },
+                    { display: "真实姓名", name: "uRealName", align: "center" },
+                    { display: "电话", name: "uTelphone", align: "center" },
+                    { display: "手机", name: "uMobile", align: "center" },
+                    { display: "邮箱", name: "uEmial", align: "center" },
+                    { display: "QQ", name: "uQQ", align: "center" },
+                    {
+                        display: "性别 ", name: "uGender", align: "center",
+                        render: function (d, i, v) {
+                            if (d.uGender == "0") {
+                                return "女";
+                            } else if (d.uGender == "1") {
+                                return "男";
+                            } else {
+                                return "保密";
+                            }
+                        }
+                    },
+                    {
+                        display: "状态 ", name: "uStatus", align: "center",
+                        render: function (data) {
+                            if (data.uStatus == "0") {
+                                return "<font color='green'>正常</font>";
+                            } else {
+                                return "<font color='red'>停用</font>";
+                            }
+                        }
+                    }
+                ],
+
+                url: "/admin/userinfo/getlist",
+                pageSizeOptions: [5, 10, 20, 30, 40, 50, 100],
+                pageSize: 10, //将默认的页容量修改成5，注意问题是你设置的5这个值一定要在[5, 10, 20, 30, 40, 50, 100]中存在，否则无用
+                toolbar: { items: toolbaritems }
+            })
+        }
+        function add() {
+            helper.openPanel("/admin/userinfo/add", "新增用户");
+        }
+        function edit() { }
+        function del() {
+            $.ligerDialog.confirm("是否删除?", "提示", function (yes) {
+                if (yes) {
+                    var row = grid.getSelectedRow();
+                    if (!row) {
+                        //提示用户必须选择一行
+                        $.ligerDialog.warn("必须选择要删除的用户", "警告提醒");
+                        return; //阻断下面代码的运行
+                    }
+                    var uID = row.uID;
+                    var url = "/admin/userinfo/del/" + uID;
+                    $.post(url, null, function (ajaxobj) {
+                        helper.returnStatus(ajaxobj, getlist)
+                    }, "json");
+                }
+            })
+        }
+
+        function setRole() {
+
+            var row = grid.getSelectedRow();
+            if (!row) {
+                //提示用户必须选择一行
+                $.ligerDialog.warn("必须选择要设置角色用户的行", "警告提醒");
+                return; //阻断下面代码的运行
+            }
+            var workGroupId = row.uWorkGroupID;
+            var uid = row.uID;
+            helper.openPanel("/admin/userinfo/setRole/" + workGroupId+"-"+uid);
+        }
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--查询条件 -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-search"></i></span>
+                            <h5>查询条件</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                <div class="control-group">
+                                    <div class="search-group">
+                                        <label class="search-label">用户名称</label>
+                                        <div class="span2 search-input">
+                                            <input id="kname" name="kname" type="text" value="">
+                                        </div>
+                                        <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                            <span class="icon-search"></span>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>用户列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

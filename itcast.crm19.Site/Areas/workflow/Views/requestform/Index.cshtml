@@ -1,0 +1,146 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+
+        var grid;
+        $(function () {
+            getlist();
+        })
+        function getlist() {
+            helper.getFunction(createGrid);
+        }
+        function createGrid(toolbaritems) {
+            grid = $("#list").ligerGrid({
+                columns: [
+                    { display: "编号", name: "wfRFID" },
+                    { display: "所属工作流", name: "wfTitle" },
+                    { display: "标题", name: "wfRFTitle" },
+                    {
+                        display: "优先级", name: "wfRFPriority", render: function (d, i, val) {
+                            if (val == "39") //高
+                            {
+                                return "<font color='red'>高</font>";
+                            }
+                            else if (val == "38") //中
+                            {
+                                return "<font color='orange'>中</font>";
+                            }
+                            else {
+                                return "<font color='green'>低</font>";
+                            }
+                        }
+                    },
+                    {
+                        display: "状态", name: "KName", render: function (data, index, value) {
+                            if (data.wfRFStatus == 41)//驳回上级
+                            {
+                                return "<font color='#ff6a00'>" + value + "</font>";
+                            }
+                            else if (data.wfRFStatus == 42)//拒绝
+                            {
+                                return "<font color='red'>" + value + "</font>";
+                            }
+                            else if (data.wfRFStatus == 43)//通过
+                            {
+                                return "<font color='green'>" + value + "</font>";
+                            }
+                            else {
+                                return "<font color='blue'>" + value + "</font>";
+                            }
+                        }
+                    },
+                    { display: "备注", name: "wfRFRemark", width: 250 },
+                ],
+                url: "/workflow/requestform/getlist",
+                parms: [{ name: "kname", value: $("#kname").val() }, { name: "wfid", value: $("#wfid").val() }],
+                toolbar: { items: toolbaritems }
+            })
+        }
+        function add() {
+            helper.openPanel("/workflow/requestform/add");
+        }
+        function edit() { }
+        function del() {
+            $.ligerDialog.confirm("是否删除?", "提示", function (yes) {
+                if (yes) {
+                    var row = grid.getSelectedRow();
+                    if (!row) {
+                        //提示用户必须选择一行
+                        $.ligerDialog.warn("必须选择要删除的行", "警告提醒");
+                        return; //阻断下面代码的运行
+                    }
+                    var wfRFID = row.wfRFID;
+                    var url = "/workflow/requestform/del/" + wfRFID;
+                    $.post(url, null, function (ajaxobj) {
+                        helper.returnStatus(ajaxobj, getlist)
+                    }, "json");
+                }
+            })
+        }
+        //打开审核明细页面
+        function getDetils() {
+            var row = grid.getSelectedRow();
+            //获取当前要查看明细的申请单id
+            var wfRFID = row.wfRFID;
+            helper.openPanel("/workflow/requestform/getDetails/" + wfRFID, "查看明细", 780,720);
+        }
+
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--查询条件 -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-search"></i></span>
+                            <h5>查询条件</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                <div class="control-group">
+                                    <div class="search-group">
+                                        <label class="search-label">名称</label>
+                                        <div class="span2 search-input">
+                                            <input id="kname" name="kname" type="text" value="">
+                                        </div>
+                                        <label class="search-label">工作流</label>
+                                        <div class="span2 search-input">
+                                            @Html.DropDownList("wfid", ViewBag.wfworks as SelectList)
+                                        </div>
+                                        <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                            <span class="icon-search"></span>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>我的申请单列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

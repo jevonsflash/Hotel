@@ -1,0 +1,125 @@
+﻿@model itcast.crm19.model.sysMenus
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+    <script type="text/javascript">
+        //打开菜单图标选择页面
+        function openicon() {
+            helper.openPanel("/iconsel.html", "菜单图标选择", 300, 300);
+        }
+
+        //设置菜单图标，此方法在iconsel.html中调用
+        function setMenuIcon(className) {
+            $("#newicon").attr("class", className); //给i标签的class属性赋值
+            //给文本框赋值
+            $("#mPicname").val(className);
+
+            //关闭菜单图标选择的对话框
+            helper.win.close();
+        }
+
+    </script>
+
+</head>
+<body>
+    <div style="margin:20px">
+        @using (Ajax.BeginForm("Edit", "menus", new AjaxOptions()
+        {
+            Url = Url.Action("Edit", "menus"),
+            HttpMethod = "Post",
+            OnSuccess = "ajaxSuccess",
+            OnBegin = "ajaxBegin",
+            OnComplete = "ajaxComplete"
+
+        }))
+        {
+            <table class="list">
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mName)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mName)
+                        @Html.ValidationMessageFor(c => c.mName)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mUrl)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mUrl)
+                        @Html.ValidationMessageFor(c => c.mUrl)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mArea)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mArea)
+                        @Html.ValidationMessageFor(c => c.mArea)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mController)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mController)
+                        @Html.ValidationMessageFor(c => c.mController)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mAction)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mAction)
+                        @Html.ValidationMessageFor(c => c.mAction)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mSortid)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mSortid)
+                        @Html.ValidationMessageFor(c => c.mSortid)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mPicname)</th>
+                    <td>
+                        @Html.TextBoxFor(c => c.mPicname)
+                        <i id="newicon" class="@Model.mPicname"></i>
+                        @Html.ValidationMessageFor(c => c.mPicname)
+                    </td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(c => c.mStatus)</th>
+                    <td>
+                        @Html.DropDownListFor(c => c.mStatus, ViewBag.selectList as SelectList)
+                        @Html.ValidationMessageFor(c => c.mStatus)
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <button class="btn btn-default">编辑</button>
+                        <button class="btn btn-default" onclick=" window.parent.helper.closePanel()">关闭</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div id="loading">
+                            <img src="~/images/loading.gif" />
+                            正在提交中.....
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        }
+    </div>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+</body>
+</html>

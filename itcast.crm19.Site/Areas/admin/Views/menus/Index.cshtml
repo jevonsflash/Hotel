@@ -1,0 +1,135 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+        $(function () {
+            //调用方法
+            getlist();
+        })
+        function getlist() {
+            helper.getFunction(createGrid)
+        }
+        var grid;
+        function createGrid(toolbaritem) {
+            grid = $("#list").ligerGrid({
+                //display:显示的列名称，name：要和服务器响应回来的json中的key保持同名
+                columns: [
+                    { display: '名称', name: 'mName', align: "left" },
+                    { display: '地址', name: 'mUrl' },
+                    { display: '区域', name: 'mArea' },
+                    { display: '控制器', name: 'mController' },
+                    { display: '方法', name: 'mAction' },
+                    {
+                        display: '图标', name: 'mPicname', render: function (d, i, v) {
+                            //v:代表当前图标的clas名称
+                            return "<i class='" + v + "'></i>";
+                        }
+                    },
+                    { display: '排序号', name: 'mSortid' },
+                    {
+                        display: '状态', name: 'mStatus', render: function (rowdata, index, val) {
+                            //mStatus的值取自val
+                            //index:代表当前行的索引
+                            //rowdata:代表当前整行的数据对象{mName:,mUrl:......mStatus:}
+                            if (val == 0) {
+                                return "<font color='green'>正常</font>";
+                            }
+                            else {
+                                return "<font color='red'>停用</font>";
+                            }
+                        }
+                    }
+                ],
+                url: "/admin/menus/getlist", //请求数据的服务器地址
+                parms: [{ name: "kname", value: $("#kname").val() }],  //表示将 kname=用户从请求报文体中传入给getlist方法
+                tree: {
+                    columnName: 'mName',
+                    idField: "mID",  //帮助文档中为idFieldName是不行的
+                    parentIDField: "mParentID"
+                }, //树的加号减号图标要显示在哪列上
+                usePager: false,  //关闭分页
+                alternatingRow: true, //开启奇数偶数行的效果
+                toolbar: {
+                    items: toolbaritem
+                }
+            });
+        }
+        function add() {
+            //利用ligerui中的弹窗将/admin/menus/add url载入弹出即可
+            helper.openPanel("/admin/menus/add", "新增菜单");
+        }
+        function edit() {
+            //1.0 获取表格中的选择行对象
+            var row = grid.getSelectedRow();
+            //2.0 判断是否有选择
+            if (!row) {
+                //提示用户必须选择一行
+                $.ligerDialog.warn("必须选择要修改的行", "警告提醒");
+                return; //阻断下面代码的运行
+            }
+            //3.0 获取选择对象中的菜单id
+            var mid = row.mID;
+            helper.openPanel("/admin/menus/edit/" + mid, "编辑菜单");
+        }
+        function del() { }
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--查询条件 -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-search"></i></span>
+                            <h5>查询条件</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                <div class="control-group">
+                                    <div class="search-group">
+                                        <label class="search-label">名称</label>
+                                        <div class="span2 search-input">
+                                            <input id="kname" name="kname" type="text" value="">
+                                        </div>
+                                        <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                            <span class="icon-search"></span>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>菜单列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                            用于显示ligergrid加载出来的数据
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loadpage">
+        <img src="~/images/loading.gif" />
+        正在载入页面，请稍后.....
+    </div>
+
+
+</body>
+</html>

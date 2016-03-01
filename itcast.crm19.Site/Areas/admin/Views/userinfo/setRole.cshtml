@@ -1,0 +1,89 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>setRole</title>
+    <script type="text/javascript">
+        var WorkGroupId;
+        var uid;
+        var grid;
+        $(function () {
+            WorkGroupId = @ViewBag.WorkGroupId;
+            uid = @ViewBag.uid;
+            createGrid();
+
+        });
+        function createGrid() {
+            grid = $("#list").ligerGrid({
+                columns: [{
+                    display: "角色名称", name: "rName"
+                }],
+                url: "/admin/userinfo/getRoleList/",
+                parms:{
+                    WorkGroupId:this.WorkGroupId,
+                    uid:this.uid
+                },
+                usePager: false,
+                checkbox: true,
+                isChecked: function (rowdata) {
+                    return rowdata.isChecked;
+                },
+                toolbar: {
+                    items: [
+                        {
+                            text: "确认",
+                            click: savaData,
+                            icon: "right"
+                        },
+                        {
+                            line: true
+                        },
+                        {
+                            text: "关闭",
+                            click: function () { window.parent.helper.localWindow.close(); },
+                            icon: "delete"
+                        }
+                    ]
+                }
+            })
+        }
+        function savaData() {
+            var rows=grid.getSelectedRows();
+            var params=uid+"-";
+            for (var i = 0; i < rows.length; i++) {
+                params+=rows[i].rID+",";
+            }
+            $.post("/admin/userinfo/setRole","params="+params,function (ajaxObj) {
+                helper.returnStatus(ajaxObj,function () {
+                    $.ligerDialog.alert(ajaxObj.msg);
+                });
+            },"json");
+        }
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>角色列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

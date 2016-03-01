@@ -1,0 +1,156 @@
+﻿@model List<itcast.crm19.model.wfProcess>
+
+@{
+    Layout = null;
+}
+@using itcast.crm19.WebHelper
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>getDetails</title>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span12">
+                    <!--申请单明细 -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-search"></i></span>
+                            <h5>申请单明细</h5>
+                        </div>
+                        <div>
+                            <ul class="thumbnails">
+
+                                @{
+                                    string title = string.Empty;
+                                    if (Model != null && Model.Any())
+                                    {
+                                        int index = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            title = item.wfRequestForm.wfRFTitle;
+                                            if (index == 1)
+                                            {
+                                                <li class="span10">
+                                                    <div class="thumbnail">
+                                                        <p>
+                                                            <h3>
+                                                                申请单名称：
+                                                                <span style="font-weight:normal">
+                                                                    @title
+                                                                </span>
+                                                                <br />
+                                                                申请人：
+                                                                <span style="font-weight:normal">
+                                                                    @UserManager.GetUserInfoByID(item.fCreatorID).uRealName
+                                                                </span>
+                                                                申请额度：
+                                                                <span style="font-weight:normal">
+                                                                    @item.wfRequestForm.wfRFNum
+                                                                </span>
+                                                                <br />
+                                                                申请理由：
+                                                                <span style="font-weight:normal">
+                                                                    @item.wfRequestForm.wfRFRemark
+                                                                </span>
+                                                            </h3>
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            }
+                                            else
+                                            //生成第二个及以后的数据明细
+                                            {
+                                                string statusStyle = string.Empty;
+                                                switch (item.wfRFStatus)
+                                                {
+                                                    case 40: statusStyle = "alert alert-info"; break;
+                                                    case 41: statusStyle = "alert"; break;
+                                                    case 42: statusStyle = "alert alert-error"; break;
+                                                    case 43: statusStyle = "alert alert-success"; break;
+                                                    default:
+                                                        break;
+                                                }
+
+                                                <li class="span10">
+                                                    <div class="thumbnail @statusStyle">
+                                                        <div class="caption" style="width:400px; float:left">
+                                                            <p>
+                                                                <h4>
+                                                                    当前审核节点：
+                                                                    <span style="font-weight:normal">
+                                                                        @item.wfWorkNodes.wfNodeTitle
+                                                                    </span>
+                                                                </h4>
+                                                                <h4>
+                                                                    审核单状态：
+                                                                    <span style="font-weight:normal">
+                                                                        @item.sysKeyValue.KName
+                                                                    </span>
+                                                                </h4>
+                                                            </p>
+                                                            <p>
+                                                                <h4>
+                                                                    处理人：
+                                                                    @{
+                                                string name = string.Empty;
+                                                if (item.wfRFStatus == 40)
+                                                {
+                                                    name = string.Join(",", UserManager.GetNameByRoleId(item.wfProcessor));
+                                                }
+                                                else
+                                                {
+                                                    if (item.wfPExt1 != null && item.wfPExt1 != string.Empty)
+                                                    {
+                                                        name = UserManager.GetUserInfoByID(item.wfPExt1.AsInt()).uRealName;
+                                                    }
+                                                }
+                                                                    }
+                                                                    <span style="font-weight:normal">
+                                                                        @name
+                                                                    </span>
+                                                                </h4>
+                                                            </p>
+
+
+                                                            <p>
+                                                                <h4>
+                                                                    处理理由：
+                                                                    <span style="font-weight:normal">
+                                                                        @item.wfPDescription
+                                                                    </span>
+                                                                </h4>
+                                                            </p>
+
+                                                        </div>
+                                                        <img src="~/images/nodeTip.png" />
+
+                                                    </div>
+                                                </li>
+
+                                            }
+                                            index++;
+                                        }
+
+                                    }
+                                }
+
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

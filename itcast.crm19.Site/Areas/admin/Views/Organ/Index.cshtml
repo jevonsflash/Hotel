@@ -1,0 +1,117 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script type="text/javascript">
+        var gird;
+        $(function () {
+            getlist();
+        })
+        function getlist() {
+            helper.getFunction(createGrid)
+        }
+        function createGrid(toolbaritem) {
+            grid = $("#list").ligerGrid({
+                //display:显示的列名称，name：要和服务器响应回来的json中的key保持同名
+                columns: [
+                    { display: '隶属', name: 'osParentID' },
+                    { display: '名称', name: 'osName' },
+                    { display: '类别', name: 'KName' },
+                    {
+                        display: '状态', name: 'osStatus', render: function (rowdata, index, val) {
+                            //mStatus的值取自val
+                            //index:代表当前行的索引
+                            //rowdata:代表当前整行的数据对象{mName:,mUrl:......mStatus:}
+                            if (val == 0) {
+                                return "<font color='green'>正常</font>";
+                            }
+                            else {
+                                return "<font color='red'>停用</font>";
+                            }
+                        }
+                    }
+                ],
+                url: "/admin/Organ/getlist", //请求数据的服务器地址
+                parms: [{ name: "kname", value: $("#kname").val() }],  //表示将 kname=用户从请求报文体中传入给getlist方法
+
+                usePager: false,  //关闭分页
+                alternatingRow: true, //开启奇数偶数行的效果
+                toolbar: {
+                    items: toolbaritem
+                }
+            });
+        }
+        function add() {
+
+            helper.openPanel("/admin/Organ/add", "新增组织结构");
+        }
+        function edit() {
+
+            var row = grid.getSelectedRow();
+
+            if (!row) {
+
+                $.ligerDialog.warn("必须选择要修改的行", "警告提醒");
+                return;
+            }
+
+            var osID = row.osID;
+            helper.openPanel("/admin/Organ/edit/" + osID, "编辑组织结构");
+        }
+        function del() {
+
+        }
+
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="content-header">
+        </div>
+        <div style="height: 100%;">
+            <div id="content-body" class="row-fluid">
+                <div class="span22">
+                    <!--查询条件 -->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-search"></i></span>
+                            <h5>查询条件</h5>
+                        </div>
+                        <div class="widget-content nopadding">
+                            <form class="form-horizontal search-form" method="post" name="basic_validate" novalidate="novalidate">
+                                <div class="control-group">
+                                    <div class="search-group">
+                                        <label class="search-label">名称</label>
+                                        <div class="span2 search-input">
+                                            <input id="kname" name="kname" type="text" value="">
+                                        </div>
+                                        <button type="button" class="btn btn-success" onclick="getlist()" style="float: right; margin: 5px 10px 0 0;">
+                                            <span class="icon-search"></span>搜索
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!--列表-->
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-th"></i></span>
+                            <h5>组织结构列表</h5>
+                        </div>
+                        <div id="list" class="widget-content nopadding">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
